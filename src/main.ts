@@ -1,10 +1,10 @@
+import { subMinutes } from 'date-fns'
+import { ObjectId } from 'mongodb'
 import { combineLatest, forkJoin, from, of } from 'rxjs'
 import { filter, groupBy, map, mergeMap, reduce, tap, toArray } from 'rxjs/operators'
-import { subMinutes } from 'date-fns'
 
 import SynchronizationConfig, { SynchronizationConfigDocument } from './model/synchronizationConfig'
 import database from './infra/database'
-import { ObjectId } from 'mongodb'
 ;(async function main() {
   await database.connect()
   const items$ = from(SynchronizationConfig.findAll({})) // last_sync_time: { $lte: subMinutes(new Date(), 15) }
