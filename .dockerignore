@@ -1,0 +1,5 @@
+node_modules/
+dist/
+logs
+__specs__
+*.md[MD]
