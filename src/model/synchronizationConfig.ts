@@ -8,7 +8,7 @@ import {
 } from 'mongodb'
 import database from '../infra/database'
 
-interface SynchronizationConfigDocument extends Document {
+export interface SynchronizationConfigDocument extends Document {
   source_database: string
   source_collection: string
   source_key: string
