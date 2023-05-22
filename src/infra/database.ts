@@ -4,7 +4,7 @@ import logger from '../logger/logger'
 class Database {
   private client?: MongoClient
   private db?: Db
-  private readonly dbName: string = process.env.DB_NAME ?? 'intracity_stagging'
+  private readonly dbName: string = process.env.DB_NAME ?? 'duplisync'
 
   constructor(private uri: string) {}
 
