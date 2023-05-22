@@ -7,7 +7,7 @@ import SynchronizationConfig, { SynchronizationConfigDocument } from './model/sy
 import database from './infra/database'
 ;(async function main() {
   await database.connect()
-  const items$ = from(SynchronizationConfig.findAll({})) // last_sync_time: { $lte: subMinutes(new Date(), 15) }
+  const items$ = from(SynchronizationConfig.findAll({last_sync_time: { $lte: subMinutes(new Date(), 15) }})) // last_sync_time: { $lte: subMinutes(new Date(), 15) }
 
   items$
     .pipe(
@@ -47,7 +47,7 @@ import database from './infra/database'
         const bulkWriteOps = item.sourceDocuments.map((source) => {
           return {
             updateMany: {
-              filter: { [item.values.destination_key]: source[item.values.source_key] },
+              filter: { [item.values.destination_key]: source[item.values.source_key].toString() },
               update: { $set: { [item.values.destination_field]: source } },
             },
           }
@@ -66,7 +66,7 @@ import database from './infra/database'
       mergeMap((item: SynchronizationConfigDocument[]) => {
         return SynchronizationConfig.updateAll(
           { _id: { $in: item.map((config) => new ObjectId(config._id)) } },
-          { $set: { last_sync_time: new Date() } }
+          { last_sync_time: new Date() }
         )
       })
     )
